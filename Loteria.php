@@ -30,7 +30,7 @@
 
 
 
-    print("Bem vindo a Loteria Mito Wernke \n 1 Mega Sena \n 2 Quina \n 3 LotoMania \n 4 LotoFácil \n");
+    print("Bem vindo a Loteria MiWe \n 1 Mega Sena \n 2 Quina \n 3 LotoMania \n 4 LotoFácil \n");
     $jogoEscolhido = readline("");
 
 
@@ -44,35 +44,37 @@
         case 1:
 
             QualLoteria($OpcAposta, $NumEscolhidosPorAposta, NumMinMegaSenna, NumMaxMegaSenna, NumMegaSenna);
-            Premiacao($NumSortMegaSenna, NumMegaSenna, $NumSorteados[]);
+            Premiacao(NumSortMegaSenna, NumMegaSenna, $NumSorteados);
 
-        exit;
+        break;
 
         case 2:   
      
             QualLoteria($OpcAposta, $NumEscolhidosPorAposta, NumMinQuina, NumMaxQuina, NumQuina);
-            Premiacao($NumSortQuina, NumQuina, $NumSorteados[]);
+            Premiacao(NumSortQuina, NumQuina, $NumSorteados);
 
-        exit;
+        break;
 
         case 3: 
     
             QualLoteria($OpcAposta, $NumEscolhidosPorAposta, NumMinLotoMania, NumMaxLotoMania, NumLotoMania);
-            Premiacao($NumSortLotoMania, NumLotoMania, $NumSorteados[]);
+            Premiacao(NumSortLotoMania, NumLotoMania, $NumSorteados);
 
-        exit;
+        break;
 
         case 4: 
     
            QualLoteria($OpcAposta, $NumEscolhidosPorAposta, NumMinLotoFacil, NumMaxLotoFacil, NumLotoFacil);
-           Premiacao($NumSortLotoFacil, NumLotoFacil, $NumSorteados[]);
+           Premiacao(NumSortLotoFacil, NumLotoFacil, $NumSorteados);
 
-        exit;
+        break;
     }
 
 
     function QualLoteria($OpcApost, $NumEscPorApost, $NumMinLot, $NumMaxLot, $NumLot)
     {
+        global $NumEscolhidosOuSorteados;
+
         switch($OpcApost)
         {
             case 1:
@@ -87,7 +89,7 @@
                 {
                     $NumEscolhidosOuSorteados[$i -1] = readline("Escolha um número de 1 a " . $NumLot . "\n");
 
-                    if(RepeteArray($NumEscolhidosOuSorteados[], $NumEscolhidosOuSorteados[$i -1]) == true or $NumEscolhidosOuSorteados[$i -1] < 1 or $$NumEscolhidosOuSorteados[$i-1] > $NumLot)
+                    if(RepeteArray($NumEscolhidosOuSorteados, $NumEscolhidosOuSorteados[$i -1]) == true or $NumEscolhidosOuSorteados[$i -1] < 1 or $$NumEscolhidosOuSorteados[$i-1] > $NumLot)
                     {
                         
                         print("O número já se repetiu ou nao está no intervalo de 1 a " . $NumLot);
@@ -96,7 +98,7 @@
                     }
                 }
 
-            exit;
+            break;
 
             case 2:
 
@@ -108,27 +110,31 @@
                 
                 for($i = $NumEscPorApost; $i > 0; $i--)
                 {
-                    $NumEscolhidosOuSorteados[$i -1] = rand(1, $NumLot);
-                    if(RepeteArray($NumEscolhidosOuSorteados, $NumEscolhidosOuSorteados[$i -1]) == true or $NumEscolhidosOuSorteados[$i -1] < 1 or $$NumEscolhidosOuSorteados[$i-1] > $NumLot)
+                    $sorteio = rand(1, $NumLot);
+
+                    if(in_array($sorteio, $NumEscolhidosOuSorteados) == true)
                     {
                         
                         $i++;
 
+                    }else
+                    {
+                        $NumEscolhidosOuSorteados[$i -1] = $sorteio;
                     }
+
+                    
                 }
 
-            exit;
+            break;
         }   
     }
 
     function RepeteArray($Array, $Num)
     {
-
-        $item = 0;
         
-        foreach($Array as $item)
+        foreach($Array as $item => $valor)
         {
-            if($Num === $item)
+            if($Num == $valor)
             {
                 return true;
             }
@@ -137,34 +143,34 @@
 
     }
 
-    function Premiacao($NumSortLot, $NumLot, $ArraySort)
+    function Premiacao(int $NumSortLot, int $NumLot, array $ArraySort)
     {
 
-        $ArraySort = [];
-        
-        for($i = $NumSortLot; $i < 0; $i--)
+        for($i = $NumSortLot; $i > 0; $i--)
         {
-            $ArraySort[$i -1] = rand(1, $NumLot);
+            $sorteia = rand(1, $NumLot);
 
-            if(RepeteArray($ArraySort, $ArraySort[$i -1]))
+            if(in_array($sorteia[$i -1], $ArraySort))
             {
                 
                 $i++;
 
+            }else
+            {
+                $ArraySort[$i -1] = $sorteia;
             }
         }
-
+        
         print"Os Números Sorteados são: ";
 
-        for($i = 0; $i != $NumSortLot; $i++)
+        
+
+        for($i = $NumSortLot; $i > 0; $i--)
         {
 
             print "$ArraySort[$i] ";
 
         }
-
-        
-
     }
 
 ?>
